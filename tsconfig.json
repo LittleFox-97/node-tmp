@@ -20,6 +20,8 @@
   "exclude": [
     "node_modules",
     "**/node_modules/*",
-    "docs/**"
+    "**/docs/*",
+    "**/test/*",
+    "eslint.config.mjs"
   ]
 }

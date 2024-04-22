@@ -11,4 +11,3 @@ CHANGELOG.new.md.tmp
 .vscode/tasks.json
 .vscode/settings.json
 .vscode/extensions.json
-src/types.ts
