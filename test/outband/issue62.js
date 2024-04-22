@@ -1,5 +1,5 @@
-var fs = require('fs');
-var join = require('path').join;
+const fs = require('node:fs')
+const { join } = require('node:path')
 
 module.exports = function (result) {
   // creates structure from issue 62
@@ -7,10 +7,10 @@ module.exports = function (result) {
 
   fs.mkdirSync(join(result.name, 'issue62'));
 
-  ['foo', 'bar'].forEach(function(subdir) {
-    fs.mkdirSync(join(result.name, 'issue62', subdir));
-    fs.writeFileSync(join(result.name, 'issue62', subdir, 'baz.txt'), '');
-  });
+  ['foo', 'bar'].forEach((subdir) => {
+    fs.mkdirSync(join(result.name, 'issue62', subdir))
+    fs.writeFileSync(join(result.name, 'issue62', subdir, 'baz.txt'), '')
+  })
 
-  this.out(result.name, this.exit);
-};
+  this.out(result.name, this.exit)
+}

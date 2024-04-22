@@ -3,5 +3,5 @@
   "async": true,
   "file": false,
   "options": {},
-  "graceful": false 
+  "graceful": false
 }

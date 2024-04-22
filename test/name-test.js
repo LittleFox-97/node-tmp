@@ -1,108 +1,105 @@
-/* eslint-disable no-octal */
-// vim: expandtab:ts=2:sw=2
+const assert = require('node:assert')
+const os = require('node:os')
+const path = require('node:path')
+const tmp = require('../lib/tmp')
+const inbandStandardTests = require('./name-inband-standard')
 
-const
-  assert = require('assert'),
-  os = require('os'),
-  path = require('path'),
-  inbandStandardTests = require('./name-inband-standard'),
-  tmp = require('../lib/tmp');
+const isWindows = os.platform() === 'win32'
 
-const isWindows = os.platform() === 'win32';
-
-describe('tmp', function () {
-  describe('#tmpName()', function () {
-    describe('when running inband standard tests', function () {
+describe('tmp', () => {
+  describe('#tmpName()', () => {
+    describe('when running inband standard tests', () => {
       inbandStandardTests(function before(done) {
-        var that = this;
-        tmp.tmpName(this.opts, function (err, name) {
-          if (err) return done(err);
-          that.topic = name;
-          done();
-        });
-      });
+        tmp.tmpName(this.opts, (err, name) => {
+          if (err) {
+            return done(err)
+          }
+          this.topic = name
+          done()
+        })
+      })
 
-      describe('with invalid tries', function () {
-        it('should result in an error on negative tries', function (done) {
-          tmp.tmpName({ tries: -1 }, function (err) {
+      describe('with invalid tries', () => {
+        it('should result in an error on negative tries', (done) => {
+          tmp.tmpName({ tries: -1 }, (err) => {
             try {
-              assert.ok(err instanceof Error, 'should have failed');
+              assert.ok(err instanceof Error, 'should have failed')
             } catch (err) {
-              return done(err);
+              return done(err)
             }
-            done();
-          });
-        });
+            done()
+          })
+        })
 
-        it('should result in an error on non numeric tries', function (done) {
-          tmp.tmpName({ tries: 'nan' }, function (err) {
+        it('should result in an error on non numeric tries', (done) => {
+          tmp.tmpName({ tries: 'nan' }, (err) => {
             try {
-              assert.ok(err instanceof Error, 'should have failed');
+              assert.ok(err instanceof Error, 'should have failed')
             } catch (err) {
-              return done(err);
+              return done(err)
             }
-            done();
-          });
-        });
-      });
-    });
+            done()
+          })
+        })
+      })
+    })
 
-    describe('when running issue specific inband tests', function () {
-      describe('on issue #176', function () {
-        const origfn = os.tmpdir;
-        it('must fail on invalid os.tmpdir()', function (done) {
-          os.tmpdir = function () { return undefined; };
-          tmp.tmpName(function (err) {
+    describe('when running issue specific inband tests', () => {
+      describe('on issue #176', () => {
+        const origfn = os.tmpdir
+        it('must fail on invalid os.tmpdir()', (done) => {
+          os.tmpdir = () => undefined
+          tmp.tmpName((err) => {
             try {
-              assert.ok(err instanceof Error, 'should have failed');
+              assert.ok(err instanceof Error, 'should have failed')
             } catch (err) {
-              return done(err);
+              return done(err)
             } finally {
-              os.tmpdir = origfn;
+              os.tmpdir = origfn
             }
-            done();
-          });
-        });
-      });
-      describe('on issue #268', function () {
-        const origfn = os.tmpdir;
-        it(`should not alter ${isWindows ? 'invalid' : 'valid'} path on os.tmpdir() returning path that includes double quotes`, function (done) {
-          const tmpdir = isWindows ? '"C:\\Temp With Spaces"' : '"/tmp with spaces"';
-          os.tmpdir = function () { return tmpdir; };
-          tmp.tmpName(function (err, name) {
-            const index = name.indexOf(path.sep + tmpdir + path.sep);
+            done()
+          })
+        })
+      })
+      describe('on issue #268', () => {
+        const origfn = os.tmpdir
+        it(`should not alter ${isWindows ? 'invalid' : 'valid'} path on os.tmpdir() returning path that includes double quotes`, (done) => {
+          const tmpdir = isWindows ? '"C:\\Temp With Spaces"' : '"/tmp with spaces"'
+          os.tmpdir = () => tmpdir
+          tmp.tmpName((name) => {
+            const index = name.indexOf(path.sep + tmpdir + path.sep)
             try {
-              assert.ok(index > 0, `${tmpdir} should have been a subdirectory name in ${name}`);
+              assert.ok(index > 0, `${tmpdir} should have been a subdirectory name in ${name}`)
             } catch (err) {
-              return done(err);
+              return done(err)
             } finally {
-              os.tmpdir = origfn;
+              os.tmpdir = origfn
             }
-            done();
-          });
-        });
-        it('should not alter valid path on os.tmpdir() returning path that includes single quotes', function (done) {
-          const tmpdir = isWindows ? '\'C:\\Temp With Spaces\'' : '\'/tmp with spaces\'';
-          os.tmpdir = function () { return tmpdir; };
-          tmp.tmpName(function (err, name) {
-            const index = name.indexOf(path.sep + tmpdir + path.sep);
+            done()
+          })
+        })
+        it('should not alter valid path on os.tmpdir() returning path that includes single quotes', (done) => {
+          const tmpdir = isWindows ? '\'C:\\Temp With Spaces\'' : '\'/tmp with spaces\''
+          os.tmpdir = () => tmpdir
+          tmp.tmpName((name) => {
+            const index = name.indexOf(path.sep + tmpdir + path.sep)
             try {
-              assert.ok(index > 0, `${tmpdir} should have been a subdirectory name in ${name}`);
+              assert.ok(index > 0, `${tmpdir} should have been a subdirectory name in ${name}`)
             } catch (err) {
-              return done(err);
+              return done(err)
             } finally {
-              os.tmpdir = origfn;
+              os.tmpdir = origfn
             }
-            done();
-          });
-        });
-      });
-    });
+            done()
+          })
+        })
+      })
+    })
 
-    describe('when running standard outband tests', function () {
-    });
+    describe('when running standard outband tests', () => {
+    })
 
-    describe('when running issue specific outband tests', function () {
-    });
-  });
-});
+    describe('when running issue specific outband tests', () => {
+    })
+  })
+})

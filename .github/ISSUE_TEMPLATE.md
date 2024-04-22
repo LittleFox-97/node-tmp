@@ -1,9 +1,5 @@
 ## Operating System
-- [ ] Linux
-- [ ] Windows 7
 - [ ] Windows 10
-- [ ] MacOS
-- other: 
 
 ## NodeJS Version
 - [ ] 0.x

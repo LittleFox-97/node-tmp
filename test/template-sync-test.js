@@ -1,28 +1,24 @@
-/* eslint-disable no-octal */
-// vim: expandtab:ts=2:sw=2
+const assert = require('node:assert')
+const tmp = require('../lib/tmp')
 
-const
-  assert = require('assert'),
-  tmp = require('../lib/tmp');
-
-describe('tmp', function () {
-  describe('dirSync()', function () {
-    it('with invalid template', function () {
+describe('tmp', () => {
+  describe('dirSync()', () => {
+    it('with invalid template', () => {
       try {
-        tmp.dirSync({template:'invalid'});
+        tmp.dirSync({ template: 'invalid' })
       } catch (err) {
-        assert.equal(err.message, 'Invalid template, found "invalid".', 'should have thrown the expected error');
+        assert.equal(err.message, 'Invalid template, found "invalid".', 'should have thrown the expected error')
       }
-    });
-  });
+    })
+  })
 
-  describe('fileSync()', function () {
-    it('with invalid template', function () {
+  describe('fileSync()', () => {
+    it('with invalid template', () => {
       try {
-        tmp.fileSync({template:'invalid'});
+        tmp.fileSync({ template: 'invalid' })
       } catch (err) {
-        assert.equal(err.message, 'Invalid template, found "invalid".', 'should have thrown the expected error');
+        assert.equal(err.message, 'Invalid template, found "invalid".', 'should have thrown the expected error')
       }
-    });
-  });
-});
+    })
+  })
+})

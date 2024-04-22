@@ -1,3 +1,3 @@
 module.exports = function (result) {
-  this.out(result.name);
-};
+  this.out(result.name)
+}
