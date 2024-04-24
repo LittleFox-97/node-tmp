@@ -156,10 +156,7 @@ function file(options, callback) {
       }
 
       if (opts.discardDescriptor) {
-        return fs.close(fd, (possibleErr) => {
-          // the chance of getting an error on close here is rather low and might occur in the most edgiest cases only
-          return cb(possibleErr, name, undefined, _prepareTmpFileRemoveCallback(name, -1, opts, false))
-        })
+        return fs.close(fd, possibleErr => cb(possibleErr, name, undefined, _prepareTmpFileRemoveCallback(name, -1, opts, false)))
       }
       // detachDescriptor passes the descriptor whereas discardDescriptor closes it, either way, we no longer care
       // about the descriptor
@@ -313,7 +310,7 @@ function _removeFileSync(fdPath) {
  * @param {number} fd file descriptor
  * @param {object} opts
  * @param {boolean} sync
- * @returns {fileCallback | fileCallbackSync}
+ * @returns {fileCallback | fileCallbackSync} the callback
  * @private
  */
 function _prepareTmpFileRemoveCallback(name, fd, opts, sync) {
@@ -361,7 +358,7 @@ function _prepareTmpDirRemoveCallback(name, opts, sync) {
  * @param {string} fileOrDirName
  * @param {boolean} sync
  * @param {cleanupCallbackSync?} cleanupCallbackSync
- * @returns {cleanupCallback | cleanupCallbackSync}
+ * @returns {cleanupCallback | cleanupCallbackSync} the callback
  * @private
  */
 function _prepareRemoveCallback(removeFunction, fileOrDirName, sync, cleanupCallbackSync) {
@@ -424,6 +421,7 @@ function _randomChars(howMany) {
   try {
     rnd = crypto.randomBytes(howMany)
   } catch (e) {
+    // eslint-disable-next-line node/no-deprecated-api
     rnd = crypto.pseudoRandomBytes(howMany)
   }
 
@@ -508,7 +506,7 @@ function _generateTmpName(opts) {
 
   // prefix and postfix
   const name = [
-    opts.prefix ? opts.prefix : 'tmp',
+    opts.prefix || 'tmp',
     '-',
     process.pid,
     '-',
@@ -547,7 +545,9 @@ function _assertAndSanitizeOptions(options) {
     }
   }
   /* istanbul ignore else */
-  if (!_isUndefined(options.tries) && isNaN(options.tries) || options.tries < 0) {
+  if (!_isUndefined(options.tries) && Number.isNaN(options.tries)) {
+    throw new Error(`Invalid tries, found "${options.tries}".`)
+  } else if (options.tries < 0) {
     throw new Error(`Invalid tries, found "${options.tries}".`)
   }
 
@@ -578,7 +578,7 @@ function _assertAndSanitizeOptions(options) {
  *
  * @param name
  * @param tmpDir
- * @returns {string}
+ * @returns {string} the resolved path
  * @private
  */
 function _resolvePath(name, tmpDir) {
