@@ -150,7 +150,7 @@ function file(options, callback) {
 
     // create and open the file
     fs.open(name, CREATE_FLAGS, opts.mode || FILE_MODE, (err, fd) => {
-      /* istanbu ignore else */
+      /* istanbul ignore else */
       if (err) {
         return cb(err)
       }

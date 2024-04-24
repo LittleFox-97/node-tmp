@@ -30,6 +30,11 @@ export default antfu(
       'style/comma-dangle': ['error', 'never'],
       'node/prefer-global/process': ['error', 'always'],
       'node/prefer-global/buffer': ['error', 'always'],
+      'style/padding-line-between-statements': ['error', {
+        blankLine: 'always',
+        prev: 'function',
+        next: '*',
+      }],
     },
   },
   { files: ['**/*.ts'], rules: {
